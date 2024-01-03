@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { baseurl, getRequest } from "../utils/services";
+import { baseurl, getRequest,postRequest } from "../utils/services";
 // import { set } from "mongoose";
 
 export const ChatContext = createContext();
@@ -8,8 +8,11 @@ export const ChatContextProvider = ({ children, user }) => {
   const [userChats, setUserChats] = useState(null);
   const [isUserChatsLoading, setIsUserChatsLoading] = useState();
   const [userChatsError, setUserChatsError] = useState();
-
-  const [potentialChats, setPotentialChats] = useState([]);
+const [messages, setMessages] = useState();
+const [isMessageLoading, setIsMessageLoading] = useState();
+const [messageError, setMessageError] = useState();  
+const [potentialChats, setPotentialChats] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
 
   useEffect(() => {
    
@@ -33,6 +36,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
         return !isChatCreated;
       });
+      
       setPotentialChats(pChats);
     };
     getUsers();
@@ -54,6 +58,42 @@ export const ChatContextProvider = ({ children, user }) => {
     getUserChats();
   }, [user]);
 
+
+
+  useEffect(() => {
+    const getMessages = async () => {
+      setIsMessageLoading(true);
+      setMessageError(null);
+     
+        const resp = await getRequest(`${baseurl}/messages/${currentChat?._id}`);
+        setIsMessageLoading(false);
+        if (resp.error) {
+          return setMessageError(resp.error);
+        }
+        setMessages(resp);
+      
+    };
+    getMessages();
+  }, [currentChat]);
+
+
+  const createChat=useCallback(async (firstId,secondId)=>{
+
+    const resp = await postRequest(`${baseurl}/chats`,JSON.stringify({firstId,secondId}));
+    if(resp.error){
+      return console.log("Error creating chat",resp);
+    }
+    setUserChats([...userChats,resp]);
+
+
+  })
+
+
+const updateCurrentChat=useCallback((chat)=>{
+  setCurrentChat(chat);
+})
+
+
   return (
     <ChatContext.Provider
       value={{
@@ -64,6 +104,12 @@ export const ChatContextProvider = ({ children, user }) => {
         userChatsError,
         setUserChatsError,
         potentialChats,
+        createChat,
+        updateCurrentChat,
+        messages,
+        isMessageLoading,
+        messageError,
+        currentChat,
       }}
     >
       {children}

@@ -13,13 +13,12 @@ export const useFetchRecipientUser = (chat, user) => {
       }
  
       const resp = await getRequest(`${baseurl}/users/find/${recipientId}`);
-      
       if (resp.error) {
         return SpeechSynthesisErrorEvent(error);
       }
       setRecipientUser(resp);
     };
     getUser();
-  }, []);
+  }, [recipientId]);
   return { recipientUser };
 };

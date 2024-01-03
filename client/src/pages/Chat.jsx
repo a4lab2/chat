@@ -4,10 +4,12 @@ import { Container, Stack } from 'react-bootstrap'
 import UserChat from '../components/chat/UserChat'
 import { AuthContext } from '../context/AuthContext'
 import PotentialChats from '../components/chat/PotentialChats'
+import ChatBox from '../components/chat/ChatBox'
+// ChatBox
 // ChatContext
 // UserChat
 const Chat = () => {
-  const {userChats,isUserChatsLoading,isUserChatsError}=useContext(ChatContext)
+  const {userChats,isUserChatsLoading,isUserChatsError,updateCurrentChat}=useContext(ChatContext)
   const {user}=useContext(AuthContext)
 
   return <Container>
@@ -16,7 +18,7 @@ const Chat = () => {
       <Stack className='messages-box flex-grow-0 pe-3' gap={3}>
         {isUserChatsLoading?<p>Loading...</p>:
         userChats.map((chat,index)=>{
-          return (<div key={index}>
+          return (<div key={index} onClick={()=>updateCurrentChat(chat)}>
             
             <UserChat chat={chat} user={user}/>
           
@@ -25,7 +27,7 @@ const Chat = () => {
         }
       </Stack>
       <Stack>
-        Chat
+        <ChatBox/>
         </Stack>
       </Stack>}</Container>
   

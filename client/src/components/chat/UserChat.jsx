@@ -3,9 +3,8 @@ import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import { Stack } from "react-bootstrap";
 import avatar from "../../assets/avatar.svg" 
 const UserChat = ({ chat, user }) => {
-  // useFetchRecipientUser
   const { recipientUser } = useFetchRecipientUser(chat, user);
-  // console.log(recipientUser);
+  
   return (
     <Stack
       direction="horizontal"
@@ -15,7 +14,7 @@ const UserChat = ({ chat, user }) => {
       <div className="d-flex">
         <div className="me-2"><img src={avatar} height="35px"  /></div>
         <div className="text-content">
-          <div className="name"> {recipientUser?.name}</div>
+          <div className="name"> {recipientUser?.user.name}</div>
           <div className="text"> Text Message</div>
         </div>
       </div>
