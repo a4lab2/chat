@@ -15,8 +15,6 @@ const Register = () => {
           <Stack gap="3">
             <h2>Register</h2>
 
-            {/* <h2>{user.name}</h2> */}
-
             <Form.Control
               type="text"
               placeholder="name"

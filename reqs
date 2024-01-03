@@ -1,0 +1,8 @@
+curl -X POST -H "Content-Type: application/json" -d '{
+    "chatId": "6593175261d76c0111741261",
+    "senderId": "6592fdfc69f42e9f2ac8348b",
+    "text": "Hello there"
+}' http://localhost:5000/api/messages
+
+
+localhost:5000/api/users/find/6591394736de5f4782c1f99d

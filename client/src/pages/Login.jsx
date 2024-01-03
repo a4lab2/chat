@@ -19,7 +19,7 @@ const Login = () => {
                 updateLoginInfo({ ...loginInfo, password: e.target.value })
               }/>
          <Button variant="primary" type="submit">
-              {isLginLoading?"Logging you in":"Login"} 
+              {isLoginLoading?"Logging you in":"Login"} 
             </Button>
         {loginError?.error && (
               <Alert variant="danger">{loginError?.message}</Alert>

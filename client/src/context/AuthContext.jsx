@@ -46,7 +46,7 @@ export const AuthContextProvider = ({ children }) => {
         `${baseurl}/users/register`,
         JSON.stringify(registerInfo)
       );
-      console.log(res);
+      // console.log(res);
       setIsRegisterLoading(true);
       if (res.error) {
         setIsRegisterLoading(false);

@@ -1,9 +1,34 @@
-import React from 'react'
-
+import React, { useContext } from 'react'
+import { ChatContext } from '../context/ChatContext'
+import { Container, Stack } from 'react-bootstrap'
+import UserChat from '../components/chat/UserChat'
+import { AuthContext } from '../context/AuthContext'
+import PotentialChats from '../components/chat/PotentialChats'
+// ChatContext
+// UserChat
 const Chat = () => {
-  return (
-    <div>Chat</div>
-  )
+  const {userChats,isUserChatsLoading,isUserChatsError}=useContext(ChatContext)
+  const {user}=useContext(AuthContext)
+
+  return <Container>
+    <PotentialChats/>
+    {userChats<1?null:<Stack direction='horizontal' gap={4} className='align-items-start'> 
+      <Stack className='messages-box flex-grow-0 pe-3' gap={3}>
+        {isUserChatsLoading?<p>Loading...</p>:
+        userChats.map((chat,index)=>{
+          return (<div key={index}>
+            
+            <UserChat chat={chat} user={user}/>
+          
+          </div>)
+        })  
+        }
+      </Stack>
+      <Stack>
+        Chat
+        </Stack>
+      </Stack>}</Container>
+  
 }
 
 export default Chat
