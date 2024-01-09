@@ -16,14 +16,59 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const [sendTextMessageError, setSendTextMessageError] = useState();
   const [newMessage, setNewMessage] = useState();
-  const [socket, setSocket] = useState();
-
-
+  const [socket, setSocket] = useState(null);
+const [onlineUsers, setOnlineUsers] = useState([]);
+console.log(onlineUsers)
 useEffect(() => {
   const newSocket=io("localhost:3000")
   setSocket(newSocket)
   return () => newSocket.disconnect()
 }, [user]);
+
+useEffect(() => {
+  if(socket===null)return
+  socket.emit("addNewUser",user?._id)
+  socket.on("getOnlineUsers",(res)=>{
+    setOnlineUsers(res)
+  })
+  return ()=>{
+    socket.off("getOnlineUsers")
+  }
+}, [socket]);
+
+
+
+useEffect(() => {
+  if(socket===null)return
+
+  const recipientId = currentChat?.members.find((id) => id !== user?._id);
+
+  socket.emit("sendMessage",{...newMessage,recipientId})
+}, [newMessage]);
+
+
+useEffect(() => {
+  if(socket===null) return
+
+  socket.on("getMessage",(res)=>{ 
+    if (currentChat?._id !==res.chatId) return
+    setMessages((prev)=>[...prev, resp]);
+  
+  })
+
+    return ()=>{
+      socket.off("getMessage")
+    }
+  
+  
+  
+}, [socket,currentChat]);
+
+
+
+
+
+
 
 
 
@@ -137,6 +182,7 @@ useEffect(() => {
         messageError,
         currentChat,
         sendTextMessage,
+        onlineUsers,
       }}
     >
       {children}
